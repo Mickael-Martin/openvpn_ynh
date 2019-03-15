@@ -2,7 +2,7 @@
 source /usr/share/yunohost/helpers
 source _common.sh
 
-ynh_trap_on
+ynh_abort_if_errors
 
 export app=$YNH_APP_INSTANCE_NAME
 export user=$app
@@ -10,7 +10,7 @@ export webuser="${user}web"
 
 # Retrieve arguments
 ynh_export domain path ip4ranges dedicated_ip
-ynh_find_port 1194
+port=$(ynh_find_port 1194) 
 export port=$port
 export local_path=/var/www/$app
 export iface=$(ip r|awk '/default/ { print $5 }')
@@ -21,8 +21,7 @@ export iface=$(ip r|awk '/default/ { print $5 }')
 ynh_check_var "$app" "app name not set"
 #ynh_user_exists "$admin" || ynh_die "User does not exist: $admin"
 ynh_normalize_url_path "$path"
-ynh_path_validity "$domain$path"
-ynh_local_path_available "$local_path"
+ynh_webpath_register $app $domain $path
 check_iptables
 check_tun_available
 check_ip4ranges $ip4ranges
