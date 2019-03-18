@@ -16,8 +16,10 @@ update_ca_cert(){
 	      	chown -R $app: /etc/openvpn/certs/
 	      	openssl crl2pkcs7 -nocrl -certfile /etc/yunohost/certs/$domain/crt.pem | openssl pkcs7 -print_certs| awk -v RS='' '{print > ("/etc/openvpn/certs/cert-" NR ".txt")}'
 	      	mv /etc/openvpn/certs/cert-1.txt /etc/openvpn/certs/cert-$domain.pem
+		castr=$(cat /etc/openvpn/certs/cert-$domain.pem)
 	      	mv /etc/openvpn/certs/cert-2.txt /etc/openvpn/certs/cachain-$domain.pem 
 	      	cat /etc/ssl/certs/DST_Root_CA_X3.pem >>/etc/openvpn/certs/cachain-$domain.pem
+		cachainstr=$(cat /etc/openvpn/certs/cachain-$domain.pem)
 	      	ynh_configure config.ovpn "${local_path}/${domain}.conf"
 	      	ynh_configure config-cli.ovpn "${local_path}/${domain}.ovpn"
 	fi
