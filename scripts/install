@@ -24,7 +24,9 @@ ynh_normalize_url_path "$path"
 ynh_webpath_register $app $domain $path
 check_iptables
 check_tun_available
-check_ip4ranges $ip4ranges
+if [ ! -z $ip4ranges ] ;then 
+  check_ip4ranges $ip4ranges
+fi
 
 
 #=================================================
