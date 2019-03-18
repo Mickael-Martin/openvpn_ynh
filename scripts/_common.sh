@@ -26,8 +26,8 @@ update_ca_cert(){
 		if [ -f "${local_path}/${domain}.ovpn" ];then
 			ynh_secure_remove "${local_path}/${domain}.ovpn"
 		fi
-	      	ynh_configure /etc/yunohost/apps/openvpn/conf/config.ovpn "${local_path}/${domain}.conf"
-	      	ynh_configure /etc/yunohost/apps/openvpn/conf/config-cli.ovpn "${local_path}/${domain}.ovpn"
+	      	ynh_configure config.ovpn "${local_path}/${domain}.conf"
+	      	ynh_configure config-cli.ovpn "${local_path}/${domain}.ovpn"
 	fi
 
 }
