@@ -73,20 +73,22 @@ configure_firewall () {
     ip4ranges=$(ynh_app_setting_get $app ip4ranges | tr " " "\n")
     iface=$(ynh_app_setting_get $app iface)
     sudo iptables -t filter -$1 FORWARD -i "${iface}" -o tun0 -m state --state ESTABLISHED,RELATED -j ACCEPT
-    for ip4range in $ip4ranges
-    do
-        if [[ "$1" = "A" ]];then
-            if ! (sudo /sbin/iptables -L -t nat | grep $ip4range | grep MASQUERADE > /dev/null 2>&1); then
-                sudo iptables -t nat -$1 POSTROUTING -s $ip4range -o "${iface}" -j MASQUERADE
-                sudo iptables -t filter -$1 FORWARD -s $ip4range -o "${iface}" -j ACCEPT
-            fi
-        elif [[ "$1" = "D" ]]; then
-            if (sudo /sbin/iptables -L -t nat | grep $ip4range | grep MASQUERADE > /dev/null 2>&1); then
-                sudo iptables -t nat -$1 POSTROUTING -s $ip4range -o "${iface}" -j MASQUERADE
-                sudo iptables -t filter -$1 FORWARD -s $ip4range -o "${iface}" -j ACCEPT
-            fi
-        fi
-    done
+    if [ ! -z $ip4ranges ];then
+	    for ip4range in $ip4ranges
+	    do
+		if [[ "$1" = "A" ]];then
+		    if ! (sudo /sbin/iptables -L -t nat | grep $ip4range | grep MASQUERADE > /dev/null 2>&1); then
+			sudo iptables -t nat -$1 POSTROUTING -s $ip4range -o "${iface}" -j MASQUERADE
+			sudo iptables -t filter -$1 FORWARD -s $ip4range -o "${iface}" -j ACCEPT
+		    fi
+		elif [[ "$1" = "D" ]]; then
+		    if (sudo /sbin/iptables -L -t nat | grep $ip4range | grep MASQUERADE > /dev/null 2>&1); then
+			sudo iptables -t nat -$1 POSTROUTING -s $ip4range -o "${iface}" -j MASQUERADE
+			sudo iptables -t filter -$1 FORWARD -s $ip4range -o "${iface}" -j ACCEPT
+		    fi
+		fi
+	    done
+      fi
 }
 
 add_firewall_rules () {
@@ -150,8 +152,10 @@ install_files () {
 
 setup_and_restart () {
     # Find gateway ip and mask and save it
-    deduce_gateway
-    ynh_save_args gateway_ip4 gateway_mask
+    if [ ! -z $ip4ranges ] ;then 
+    	deduce_gateway
+    	ynh_save_args gateway_ip4 gateway_mask
+    fi
 
     # Open port in firewall
     if [ -z $dedicated_ip ]; then
