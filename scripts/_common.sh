@@ -1,4 +1,4 @@
-#!/bin/bash
+openvpn#!/bin/bash
 
 # App package root directory should be the parent folder
 PKG_DIR=$(cd ../; pwd)
@@ -177,7 +177,7 @@ setup_and_restart () {
     sudo chown -R $user: /var/log/openvpn
     sudo chown -R $user: /etc/openvpn
     sudo chmod 640 /etc/openvpn/users_settings.csv
-    sudo chmod u+x /etc/openvpn/handler.sh  
+    sudo chmod a+x /etc/openvpn/handler.sh  
     # Add OpenVPN to YunoHost's monitored services
     sudo yunohost service add openvpn --log /var/log/openvpn/status.log
 
