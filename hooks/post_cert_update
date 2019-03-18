@@ -3,12 +3,15 @@ source /usr/share/yunohost/helpers
 source /etc/yunohost/apps/openvpn/scripts/_common.sh
 pwd
 
-export domain=$1
+updatedDomain=$1
+
 export app=openvpn
 export local_path=/var/www/$app
+export ta_key=$(sudo cat /etc/openvpn/ta.key)
+export port=$(ynh_app_setting_get $app port)
+export domain=$(ynh_app_setting_get $app domain)
 
-installedDomain=$(ynh_app_setting_get $app domain)
-if [ "$domain" == "$installedDomain" ];then
+if [ "$domain" == "$updatedDomain" ];then
    update_ca_cert
    systemctl openvpn restart
 fi
