@@ -1,9 +1,11 @@
 #!/bin/bash
 source /usr/share/yunohost/helpers
-source _common.sh
+source /etc/yunohost/apps/openvpn/scripts/_common.sh
+pwd
 
-app=$1
-domain=$2
+export domain=$1
+export app=openvpn
+export local_path=/var/www/$app
 
 installedDomain=$(ynh_app_setting_get $app domain)
 if [ "$domain" == "$installedDomain" ];then
