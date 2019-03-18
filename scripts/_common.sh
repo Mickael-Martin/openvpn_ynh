@@ -20,8 +20,14 @@ update_ca_cert(){
 	      	mv /etc/openvpn/certs/cert-2.txt /etc/openvpn/certs/cachain-$domain.pem 
 	      	cat /etc/ssl/certs/DST_Root_CA_X3.pem >>/etc/openvpn/certs/cachain-$domain.pem
 		export cachainstr=$(cat /etc/openvpn/certs/cachain-$domain.pem)
-	      	ynh_configure config.ovpn "${local_path}/${domain}.conf"
-	      	ynh_configure config-cli.ovpn "${local_path}/${domain}.ovpn"
+		if [ -f "${local_path}/${domain}.conf" ];then 
+			ynh_secure_remove "${local_path}/${domain}.conf"
+		fi
+		if [ -f "${local_path}/${domain}.ovpn" ];then
+			ynh_secure_remove "${local_path}/${domain}.ovpn"
+		fi
+	      	ynh_configure /etc/yunohost/apps/openvpn/conf/config.ovpn "${local_path}/${domain}.conf"
+	      	ynh_configure /etc/yunohost/apps/openvpn/conf/config-cli.ovpn "${local_path}/${domain}.ovpn"
 	fi
 
 }
