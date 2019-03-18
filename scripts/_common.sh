@@ -128,7 +128,10 @@ install_files () {
 
     # IP forwarding
     sudo cp ../conf/sysctl /etc/sysctl.d/openvpn.conf
-
+    
+    # DNS configuration
+    echo "listen-address=10.8.0.1" >/etc/dnsmasq.d/openvpn
+    systemctl restart dnsmasq
 }
 
 setup_and_restart () {
