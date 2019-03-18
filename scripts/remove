@@ -39,7 +39,7 @@ ynh_secure_rm "/etc/fail2ban/filter.d/$app.conf"
 ynh_secure_rm "/etc/fail2ban/jail.d/${app}.conf"
 
 # DNS configuration
-ynh_secure_rm/etc/dnsmasq.d/openvpn
+ynh_secure_rm /etc/dnsmasq.d/openvpn
 systemctl restart dnsmasq
 
 ynh_rm_nginx_conf
