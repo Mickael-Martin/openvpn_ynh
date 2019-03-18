@@ -1,7 +1,6 @@
 #!/bin/bash
 source /usr/share/yunohost/helpers
-source /etc/yunohost/apps/openvpn/scripts/_common.sh
-pwd
+source ../apps/openvpn/scripts/_common.sh
 
 updatedDomain=$1
 
