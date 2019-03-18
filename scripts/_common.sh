@@ -1,4 +1,4 @@
-openvpn#!/bin/bash
+#!/bin/bash
 
 # App package root directory should be the parent folder
 PKG_DIR=$(cd ../; pwd)
