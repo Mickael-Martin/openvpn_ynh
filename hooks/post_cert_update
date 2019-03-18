@@ -8,4 +8,5 @@ domain=$2
 installedDomain=$(ynh_app_setting_get $app domain)
 if [ "$domain" == "$installedDomain" ];then
    update_ca_cert
+   systemctl openvpn restart
 fi
