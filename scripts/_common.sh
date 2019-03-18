@@ -12,7 +12,7 @@ PKG_DIR=$(cd ../; pwd)
 update_ca_cert(){
 	isLE=$(yunohost domain cert-status $domain | grep -c "CA_type: Let's Encrypt")
 	if [ $isLE -eq 1 ];then
-		mkdir /etc/openvpn/certs/
+		mkdir -p /etc/openvpn/certs/
 	      	chown -R $app: /etc/openvpn/certs/
 	      	openssl crl2pkcs7 -nocrl -certfile /etc/yunohost/certs/$domain/crt.pem | openssl pkcs7 -print_certs| awk -v RS='' '{print > ("/etc/openvpn/certs/cert-" NR ".txt")}'
 	      	mv /etc/openvpn/certs/cert-1.txt /etc/openvpn/certs/cert-$domain.pem
