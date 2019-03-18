@@ -34,6 +34,7 @@ my_ynh_backup "/etc/php5/fpm/conf.d/20-$app.ini" "conf/php-fpm.ini"
 my_ynh_backup "/etc/fail2ban/jail.d/${app}.conf" "conf/fail2ban-jail.conf"
 my_ynh_backup "/etc/fail2ban/filter.d/$app.conf" "conf/fail2ban-filter.conf"
 my_ynh_backup "/etc/logrotate.d/$app.conf" "conf/logrotate.conf"
+my_ynh_backup "/etc/dnsmasq.d/openvpn"
 
 # Copy log
 my_ynh_backup "/var/log/openvpn" "log"
