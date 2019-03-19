@@ -16,5 +16,5 @@ if [ "$domain" == "$updatedDomain" ];then
    source /etc/yunohost/apps/openvpn/scripts/_common.sh
    update_ca_cert
    cd $currDir
-   systemctl openvpn restart
+   systemctl restart openvpn
 fi
