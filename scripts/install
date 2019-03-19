@@ -37,11 +37,5 @@ ynh_save_args ip4ranges port local_path iface dedicated_ip
 # Install official debian package
 ynh_app_dependencies openvpn,openvpn-auth-ldap,netmask
 
-# Create DH for main domain
-generate_dh
-
-#Add secret for auth
-generate_secret_key
-
 # Install configured files and restart services 
 setup_and_restart
