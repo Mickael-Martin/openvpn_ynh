@@ -14,6 +14,8 @@ if [ "$domain" == "$updatedDomain" ];then
    currDir=$(pwd)
    cd /etc/yunohost/apps/openvpn/scripts/
    source /etc/yunohost/apps/openvpn/scripts/_common.sh
+   generate_dh
+   generate_secret_key
    update_ca_cert
    cd $currDir
    systemctl restart openvpn
