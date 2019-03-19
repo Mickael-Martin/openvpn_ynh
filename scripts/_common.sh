@@ -166,6 +166,9 @@ install_files () {
     # Create DH for main domain
     generate_dh
     
+    #testing 
+    pwd
+    
     ynh_configure fail2ban-jail.conf "/etc/fail2ban/jail.d/${app}.conf"
     sudo cp ../conf/ldap.conf /etc/openvpn/auth/
     sudo ln -s /etc/ssl/certs/ca-yunohost_crt.pem "${local_path}/ca.crt"
