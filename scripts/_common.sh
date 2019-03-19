@@ -24,10 +24,10 @@ generate_secret_key(){
 update_ca_cert(){
 	mkdir -p /etc/openvpn/certs/
 	chown -R $app: /etc/openvpn/certs/
-	make-cadir "$domain"
 	if [ -d "$domain" ] ;then
 		ynh_secure_remove "$domain"
 	fi
+	make-cadir "$domain"
 	cd $domain
 	ln -s openssl-1.0.0.cnf openssl.cnf
 	ynh_replace_string "export KEY_COUNTRY.*" "export KEY_COUNTRY=FR" vars
