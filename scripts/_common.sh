@@ -12,7 +12,7 @@ generate_dh(){
 	fi
 	dh_size=1024
 	info "Generate dhparam(${dh_size}) file, this step may be long..."
-	sudo openssl dhparam -out "/etc/yunohost/certs/${domain}/dh.pem" $dh_size > /dev/null
+	sudo openssl dhparam -out "/etc/yunohost/certs/${domain}/keys/dh.pem" $dh_size > /dev/null
 }
 generate_secret_key(){
 	if [ -f /etc/openvpn/ta.key ];then
