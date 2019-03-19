@@ -40,7 +40,7 @@ update_ca_cert(){
 	source ./vars
 	./clean-all
 	./pkitool --initca
-	./build-key --batch ${domain}
+	./build-key-server --batch ${domain}
 	
 	export castr=$(cat /etc/openvpn/certs/$domain/keys/$domain.crt)
 	export cachainstr=$(cat /etc/openvpn/certs/$domain/keys/ca.crt)
