@@ -41,7 +41,7 @@ ynh_app_dependencies openvpn,openvpn-auth-ldap,netmask
 generate_dh
 
 #Add secret for auth
-sudo openvpn --genkey --secret /etc/openvpn/ta.key
+generate_secret_key
 
 # Install configured files and restart services 
 setup_and_restart
