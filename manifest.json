@@ -8,7 +8,7 @@
     "fr": "Votre tunnel privé et sécurisé vers Internet"
   },
   "requirements": {
-      "yunohost": ">= 2.4"
+      "yunohost": ">= 3.4"
   },
   "license": "GPL-2.0",
   "url": "http://openvpn.net",
