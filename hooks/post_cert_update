@@ -11,6 +11,9 @@ if [ "$domain" == "$updatedDomain" ];then
    export local_path=/var/www/$app
    export ta_key=$(sudo cat /etc/openvpn/ta.key)
    export port=$(ynh_app_setting_get $app port)
+   currDir=$(pwd)
+   cd ../apps/openvpn/scripts/
    update_ca_cert
+   cd $currDir
    systemctl openvpn restart
 fi
