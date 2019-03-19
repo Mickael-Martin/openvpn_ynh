@@ -3,9 +3,6 @@
 # App package root directory should be the parent folder
 PKG_DIR=$(cd ../; pwd)
 
-
-
-
 #============================================================
 # Specific to openvpn
 #============================================================
@@ -25,26 +22,36 @@ generate_secret_key(){
 }
 
 update_ca_cert(){
-	isLE=$(yunohost domain cert-status $domain | grep -c "CA_type: Let's Encrypt")
-	if [ $isLE -eq 1 ];then
-		mkdir -p /etc/openvpn/certs/
-	      	chown -R $app: /etc/openvpn/certs/
-	      	openssl crl2pkcs7 -nocrl -certfile /etc/yunohost/certs/$domain/crt.pem | openssl pkcs7 -print_certs| awk -v RS='' '{print > ("/etc/openvpn/certs/cert-" NR ".txt")}'
-	      	mv /etc/openvpn/certs/cert-1.txt /etc/openvpn/certs/cert-$domain.pem
-		export castr=$(cat /etc/openvpn/certs/cert-$domain.pem)
-	      	mv /etc/openvpn/certs/cert-2.txt /etc/openvpn/certs/cachain-$domain.pem 
-	      	cat /etc/ssl/certs/DST_Root_CA_X3.pem >>/etc/openvpn/certs/cachain-$domain.pem
-		export cachainstr=$(cat /etc/openvpn/certs/cachain-$domain.pem)
-		if [ -f "${local_path}/${domain}.conf" ];then 
-			ynh_secure_remove "${local_path}/${domain}.conf"
-		fi
-		if [ -f "${local_path}/${domain}.ovpn" ];then
-			ynh_secure_remove "${local_path}/${domain}.ovpn"
-		fi
-	      	ynh_configure config.ovpn "${local_path}/${domain}.conf"
-	      	ynh_configure config-cli.ovpn "${local_path}/${domain}.ovpn"
+	mkdir -p /etc/openvpn/certs/
+	chown -R $app: /etc/openvpn/certs/
+	make-cadir "$domain"
+	if [ -d "$domain" ] ;then
+		ynh_secure_remove "$domain"
 	fi
-
+	cd $domain
+	ln -s openssl-1.0.0.cnf openssl.cnf
+	ynh_replace_string "export KEY_COUNTRY.*" "export KEY_COUNTRY=FR" vars
+	ynh_replace_string "export KEY_PROVINCE.*" "export KEY_PROVINCE=Yunohost" vars
+	ynh_replace_string "export KEY_CITY.*" "export KEY_CITY=Yunohost" vars
+	ynh_replace_string "export KEY_ORG.*" "export KEY_ORG=$domain" vars
+	ynh_replace_string "export KEY_EMAIL.*" "export KEY_EMAIL=admin@$domain" vars
+	ynh_replace_string "export KEY_OU.*" "export KEY_OU=$domain" vars
+	ynh_replace_string "export KEY_NAME.*" "export KEY_NAME=$domain" vars
+	source ./vars
+	./clean-all
+	./pkitool --initca
+	./build-key --batch ${domain}
+	
+	export castr=$(cat /etc/openvpn/certs/$domain/keys/$domain.crt)
+	export cachainstr=$(cat /etc/openvpn/certs/$domain/keys/ca.crt)
+	if [ -f "${local_path}/${domain}.conf" ];then 
+		ynh_secure_remove "${local_path}/${domain}.conf"
+	fi
+	if [ -f "${local_path}/${domain}.ovpn" ];then
+		ynh_secure_remove "${local_path}/${domain}.ovpn"
+	fi
+      	ynh_configure config.ovpn "${local_path}/${domain}.conf"
+      	ynh_configure config-cli.ovpn "${local_path}/${domain}.ovpn"
 }
 
 check_iptables () {
@@ -149,7 +156,7 @@ install_files () {
 
     # Configurations
     set +x
-    export ca_yunohost=$(sudo cat /etc/ssl/certs/ca-yunohost_crt.pem)
+    #export ca_yunohost=$(sudo cat /etc/ssl/certs/ca-yunohost_crt.pem)
     export ta_key=$(sudo cat /etc/openvpn/ta.key)
     set -x
     ynh_configure yunohost.conf "/etc/openvpn/yunohost.conf"
