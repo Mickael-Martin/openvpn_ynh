@@ -155,17 +155,16 @@ install_files () {
     sudo cp -a ../sources/. $local_path
 
     # Configurations
-    set +x
-    #export ca_yunohost=$(sudo cat /etc/ssl/certs/ca-yunohost_crt.pem)
-    export ta_key=$(sudo cat /etc/openvpn/ta.key)
-    set -x
-    ynh_configure yunohost.conf "/etc/openvpn/yunohost.conf"
-    
     #Add secret for auth
     generate_secret_key
+    export ta_key=$(sudo cat /etc/openvpn/ta.key)
+    ynh_configure yunohost.conf "/etc/openvpn/yunohost.conf"
+    
     update_ca_cert
+    
     # Create DH for main domain
     generate_dh
+    
     ynh_configure fail2ban-jail.conf "/etc/fail2ban/jail.d/${app}.conf"
     sudo cp ../conf/ldap.conf /etc/openvpn/auth/
     sudo ln -s /etc/ssl/certs/ca-yunohost_crt.pem "${local_path}/ca.crt"
