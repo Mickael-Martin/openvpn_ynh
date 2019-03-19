@@ -1,6 +1,5 @@
 #!/bin/bash
 source /usr/share/yunohost/helpers
-source /etc/yunohost/apps/openvpn/scripts/_common.sh
 
 updatedDomain=$1
 
@@ -14,6 +13,7 @@ if [ "$domain" == "$updatedDomain" ];then
    export port=$(ynh_app_setting_get $app port)
    currDir=$(pwd)
    cd /etc/yunohost/apps/openvpn/scripts/
+   source /etc/yunohost/apps/openvpn/scripts/_common.sh
    update_ca_cert
    cd $currDir
    systemctl openvpn restart
