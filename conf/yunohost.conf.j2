@@ -23,7 +23,7 @@ tls-server
 ca   /etc/openvpn/certs/{{ domain }}/keys/ca.crt
 cert /etc/openvpn/certs/{{ domain }}/keys/{{ domain }}.crt
 key  /etc/openvpn/certs/{{ domain }}/keys/{{ domain }}.key
-dh   /etc/yunohost/certs/{{ domain }}/keys/dh.pem
+dh   /etc/openvpn/certs/{{ domain }}/keys/dh.pem
 ; When a client connects, check its certificate hasn't been revoked.
 ; Must be accessible without root privileges
 crl-verify /etc/openvpn/crl.pem
