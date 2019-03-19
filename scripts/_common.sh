@@ -52,6 +52,7 @@ update_ca_cert(){
 	fi
       	ynh_configure config.ovpn "${local_path}/${domain}.conf"
       	ynh_configure config-cli.ovpn "${local_path}/${domain}.ovpn"
+	cd $PKG_DIR
 }
 
 check_iptables () {
