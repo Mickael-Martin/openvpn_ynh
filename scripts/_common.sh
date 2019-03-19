@@ -9,6 +9,21 @@ PKG_DIR=$(cd ../; pwd)
 #============================================================
 # Specific to openvpn
 #============================================================
+generate_dh(){
+	if [ -f /etc/yunohost/certs/${domain}/dh.pem ];then
+		ynh_secure_remove /etc/yunohost/certs/${domain}/dh.pem
+	fi
+	dh_size=1024
+	info "Generate dhparam(${dh_size}) file, this step may be long..."
+	sudo openssl dhparam -out "/etc/yunohost/certs/${domain}/dh.pem" $dh_size > /dev/null
+}
+generate_secret_key(){
+	if [ -f /etc/openvpn/ta.key ];then
+		ynh_secure_remove /etc/openvpn/ta.key
+	fi
+	sudo openvpn --genkey --secret /etc/openvpn/ta.key
+}
+
 update_ca_cert(){
 	isLE=$(yunohost domain cert-status $domain | grep -c "CA_type: Let's Encrypt")
 	if [ $isLE -eq 1 ];then
